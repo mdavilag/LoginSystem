@@ -1,0 +1,57 @@
+# Visual Studio
+.vscode/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# .NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+
+# Rider
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/shelf/
+.idea/**/dictionary.xml
+.idea/**/description.html
+.idea/**/modules.xml
+.idea/**/assets/
+.idea/**/External Libraries/
+.idea/**/scratches/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+*.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# DotNet specific
+project.lock.json
+project.fragment.lock.json
+artifacts/
+bin/
+obj/
+
+# macOS specific files
+*.DS_Store
