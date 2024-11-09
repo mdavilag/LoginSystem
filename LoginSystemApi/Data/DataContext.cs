@@ -1,4 +1,5 @@
-﻿using LoginSystemApi.Models;
+﻿using LoginSystemApi.Mappings;
+using LoginSystemApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoginSystemApi.Data
@@ -13,7 +14,7 @@ namespace LoginSystemApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.ApplyConfiguration(new UserMap);
         }
     }
 }
