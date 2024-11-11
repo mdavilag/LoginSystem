@@ -8,11 +8,16 @@ namespace LoginSystemApi.Mappings
     {
         public void Configure(EntityTypeBuilder<RoleModel> builder)
         {
+            builder.ToTable("Roles");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Role)
                 .HasColumnName("Role")
                 .HasColumnType("integer")
                 .IsRequired();
+
+            builder.HasMany(x => x.Users)
+                .WithMany(x => x.Roles)
+                .UsingEntity(x => x.ToTable("UserRoles"));
         }
     }
 }
