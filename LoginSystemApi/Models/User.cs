@@ -10,11 +10,11 @@ namespace LoginSystemApi.Models
         public string PasswordHash { get; set; }
         public string? Cpf { get; set; }
 
-        public List<ERoles> Roles { get; set; }
+        public ICollection<RoleModel> Roles { get; set; }
 
-        public User() { 
-            this.Roles = new List<ERoles>();
-            this.Roles.Add(ERoles.User);
+        public User() {
+            this.Roles = new List<RoleModel>();
+            this.Roles.Add(new RoleModel());
         }
     }
 }
