@@ -2,7 +2,7 @@
 
 namespace LoginSystemApi.Models
 {
-    public class User
+    public class UserModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -12,7 +12,7 @@ namespace LoginSystemApi.Models
 
         public ICollection<RoleModel> Roles { get; set; }
 
-        public User() {
+        public UserModel() {
             this.Roles = new List<RoleModel>();
             this.Roles.Add(new RoleModel());
         }

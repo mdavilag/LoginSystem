@@ -10,6 +10,7 @@ namespace LoginSystemApi.Mappings
         {
             builder.ToTable("Roles");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.Role)
                 .HasColumnName("Role")
                 .HasColumnType("integer")

@@ -1,4 +1,6 @@
 ﻿using LoginSystemApi.Data;
+using LoginSystemApi.DTO;
+using LoginSystemApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
@@ -18,7 +20,12 @@ namespace LoginSystemApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(_context.Users.ToList());
+            try{
+                return Ok(_context.Users.ToList());
+            }
+            catch(Exception ex){
+                return BadRequest(ex.Message);
+            }
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -29,6 +36,22 @@ namespace LoginSystemApi.Controllers
 
             else return NotFound();
 
+        }
+        public async Task<IActionResult> Register([FromBody] UserRegisterDto userDto)
+        {
+            var newUser = new UserModel();
+            try
+            {
+                newUser.Cpf = userDto.Cpf;
+                newUser.Name = userDto.Name;
+                newUser.Email = userDto.Email;
+                newUser.PasswordHash = userDto.Password; //Implementar hash+salt
+
+                return Ok();
+            }catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

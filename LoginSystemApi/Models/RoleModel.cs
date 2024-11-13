@@ -7,6 +7,6 @@ namespace LoginSystemApi.Models
         public int Id { get; set; }
         public ERoles Role{ get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<UserModel> Users { get; set; }
     }
 }
