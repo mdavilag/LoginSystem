@@ -1,6 +1,7 @@
 ﻿using LoginSystemApi.Data;
 using LoginSystemApi.DTO;
 using LoginSystemApi.Models;
+using LoginSystemApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
@@ -12,9 +13,11 @@ namespace LoginSystemApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly UserService _service;
 
-        public UserController(DataContext context) {
+        public UserController(DataContext context, UserService service) {
             _context = context;
+            _service = service;
         }
 
         [HttpGet]
@@ -37,20 +40,22 @@ namespace LoginSystemApi.Controllers
             else return NotFound();
 
         }
+        [HttpPost]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userDto)
         {
-            var newUser = new UserModel();
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
+
             try
             {
-                newUser.Cpf = userDto.Cpf;
-                newUser.Name = userDto.Name;
-                newUser.Email = userDto.Email;
-                newUser.PasswordHash = userDto.Password; //Implementar hash+salt
+                var created = await _service.RegisterUser(userDto);
 
-                return Ok();
+                if (created) return Ok("User registered");
+                else return BadRequest("Failed to register the user");
+                
             }catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest($"Error {ex.Message}");
             }
         }
     }

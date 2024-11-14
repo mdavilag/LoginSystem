@@ -35,7 +35,11 @@ namespace LoginSystemApi.Mappings
 
             builder.HasMany(x => x.Roles)
                 .WithMany(x => x.Users)
-                .UsingEntity(x => x.ToTable("UserRoles"));
+                .UsingEntity<Dictionary<string, object>>(
+                    "UserRole",
+                    x=>x.HasOne<RoleModel>().WithMany().HasForeignKey("RoleId"),
+                    x=>x.HasOne<UserModel>().WithMany().HasForeignKey("UserId")
+                );
         }
     }
 }
