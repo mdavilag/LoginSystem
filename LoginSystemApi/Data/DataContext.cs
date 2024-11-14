@@ -11,6 +11,7 @@ namespace LoginSystemApi.Data
                 
         }
         public DbSet<UserModel> Users { get; set; }
+        public DbSet<RoleModel> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
