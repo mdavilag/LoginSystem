@@ -1,6 +1,8 @@
 ﻿using LoginSystemApi.Data;
 using LoginSystemApi.DTO;
 using LoginSystemApi.Models;
+using Microsoft.AspNetCore.Identity;
+using SecureIdentity.Password;
 
 namespace LoginSystemApi.Services
 {
@@ -13,19 +15,21 @@ namespace LoginSystemApi.Services
             _context = context;
         }
 
-        public async bool RegisterUser(UserRegisterDto userDto)
+        public async Task<bool> RegisterUser(UserRegisterDto userDto)
         {
             var user = new UserModel()
             {
                 Name = userDto.Name,
                 Email = userDto.Email,
                 Cpf = userDto.Cpf,
-                PasswordHash = userDto.Password // Need to increment Hash logic
+                PasswordHash = PasswordHasher.Hash(userDto.Password)
             };
             var userRole = _context.Roles.FirstOrDefault(x=>x.Id == 0);
             user.Roles.Add(userRole);
-            
 
+
+
+            return true;
         }
     }
 }
