@@ -7,13 +7,13 @@ namespace LoginSystemApi.Mappings
     public class RoleMap : IEntityTypeConfiguration<RoleModel>
     {
         public void Configure(EntityTypeBuilder<RoleModel> builder)
-        {
+        { 
             builder.ToTable("Roles");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x => x.Role)
-                .HasColumnName("Role")
-                .HasColumnType("integer")
+            builder.Property(x => x.Name)
+                .HasColumnName("Name")
+                .HasColumnType("VARCHAR(20)")
                 .IsRequired();
 
             builder.HasMany(x => x.Users)

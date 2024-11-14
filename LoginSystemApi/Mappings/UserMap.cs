@@ -15,18 +15,18 @@ namespace LoginSystemApi.Mappings
 
             builder.Property(x => x.Name)
                 .HasColumnName("Name")
-                .HasColumnType("text")
+                .HasColumnType("VARCHAR(120)")
                 .IsRequired()
-                .HasMaxLength(200);
+                .HasMaxLength(120);
             builder.Property(x => x.Email)
                 .HasColumnName("Email")
-                .HasColumnType("text")
+                .HasColumnType("VARCHAR(80)")
                 .IsRequired()
                 .HasMaxLength(80);
             builder.Property(x => x.Cpf)
                 .IsRequired()
                 .HasColumnName("Cpf")
-                .HasColumnType("text")
+                .HasColumnType("VARCHAR(14)")
                 .HasMaxLength(14);
             builder.Property(x => x.PasswordHash)
                 .HasColumnName("PasswordHash")

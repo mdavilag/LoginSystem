@@ -1,6 +1,4 @@
-﻿using LoginSystemApi.Enums;
-
-namespace LoginSystemApi.Models
+﻿namespace LoginSystemApi.Models
 {
     public class UserModel
     {
@@ -9,12 +7,10 @@ namespace LoginSystemApi.Models
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string? Cpf { get; set; }
-
         public ICollection<RoleModel> Roles { get; set; }
 
         public UserModel() {
             this.Roles = new List<RoleModel>();
-            this.Roles.Add(new RoleModel());
         }
     }
 }
