@@ -24,7 +24,11 @@ namespace LoginSystemApi.Controllers
         public async Task<IActionResult> GetAll()
         {
             try{
-                return Ok(_context.Users.ToList());
+                var users = await _context.Users
+                    .Include(x=>x.UserRoles)
+                    .ThenInclude(x=>x.Role)
+                    .ToListAsync();
+                return Ok(users);
             }
             catch(Exception ex){
                 return BadRequest(ex.Message);

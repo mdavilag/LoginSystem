@@ -15,7 +15,7 @@ namespace LoginSystemApi.Services
             _context = context;
         }
 
-        public async Task<bool> RegisterUser(UserRegisterDto userDto)
+        public async Task<bool> RegisterUser(UserRegisterDto userDto) // Return here to improve error handling
         {
             try
             {   // Check if user already exists
@@ -24,7 +24,6 @@ namespace LoginSystemApi.Services
                     Console.WriteLine("Email ou Cpf já cadastrado");
                     return (false);
                 }
-
                 // Create and map userDto to user
                 var user = new UserModel()
                 {
@@ -60,8 +59,12 @@ namespace LoginSystemApi.Services
                 return false; // Needs improvement
             }
 
+        } 
+        
+        //public async Task<bool> UpdateUser()
+        //{
 
-
-        }
+        //}
+        
     }
 }
