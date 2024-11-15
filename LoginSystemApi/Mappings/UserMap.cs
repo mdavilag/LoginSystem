@@ -37,8 +37,14 @@ namespace LoginSystemApi.Mappings
                 .WithMany(x => x.Users)
                 .UsingEntity<Dictionary<string, object>>(
                     "UserRole",
-                    x=>x.HasOne<RoleModel>().WithMany().HasForeignKey("RoleId"),
-                    x=>x.HasOne<UserModel>().WithMany().HasForeignKey("UserId")
+                    x=>x.HasOne<RoleModel>()
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("FK_UserRole_RoleId"),
+                    x=>x.HasOne<UserModel>()
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .HasConstraintName("FK_UserRole_UserId")
                 );
         }
     }

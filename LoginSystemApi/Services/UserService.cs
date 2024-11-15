@@ -35,10 +35,13 @@ namespace LoginSystemApi.Services
                 };
 
                 // Search for the Role "User" and adds into the new user roles
-                var userRole = await _context.Roles.FirstOrDefaultAsync(x=>x.Name == "User");
-                if (userRole==null) return false;
 
-                user.Roles.Add(userRole);
+                // To implement
+
+                //var userRole = await _context.Roles.FirstOrDefaultAsync(x=>x.Name == "User");
+                //if (userRole==null) return false;
+
+                //user.Roles.Add(userRole);
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();

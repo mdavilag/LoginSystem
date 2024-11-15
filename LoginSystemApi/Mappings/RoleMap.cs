@@ -16,9 +16,6 @@ namespace LoginSystemApi.Mappings
                 .HasColumnType("VARCHAR(20)")
                 .IsRequired();
 
-            builder.HasMany(x => x.Users)
-                .WithMany(x => x.Roles)
-                .UsingEntity(x => x.ToTable("UserRoles"));
         }
     }
 }
