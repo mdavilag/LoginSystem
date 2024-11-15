@@ -33,19 +33,11 @@ namespace LoginSystemApi.Mappings
                 .HasColumnType("text")
                 .IsRequired();
 
-            builder.HasMany(x => x.Roles)
-                .WithMany(x => x.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserRole",
-                    x=>x.HasOne<RoleModel>()
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("FK_UserRole_RoleId"),
-                    x=>x.HasOne<UserModel>()
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .HasConstraintName("FK_UserRole_UserId")
-                );
+
+            builder.HasMany(x => x.UserRoles)
+                .WithOne(x => x.User)
+                .HasConstraintName("FK_UserRoles_UserId")
+                .HasForeignKey("UserId");
         }
     }
 }

@@ -38,12 +38,19 @@ namespace LoginSystemApi.Services
 
                 // To implement
 
-                //var userRole = await _context.Roles.FirstOrDefaultAsync(x=>x.Name == "User");
-                //if (userRole==null) return false;
+                var userRole = await _context.Roles.FirstOrDefaultAsync(x => x.Name == "User");
+                if (userRole == null) return false;
 
-                //user.Roles.Add(userRole);
+
 
                 _context.Users.Add(user);
+
+                user.UserRoles.Add(new UserRoleModel()
+                {
+                    UserId = user.Id,
+                    RoleId = userRole.Id
+                });
+
                 await _context.SaveChangesAsync();
 
                 return true;

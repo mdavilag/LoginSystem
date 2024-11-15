@@ -7,10 +7,10 @@
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string? Cpf { get; set; }
-        public ICollection<RoleModel> Roles { get; set; }
+        public ICollection<UserRoleModel> UserRoles{ get; set; }
 
         public UserModel() {
-            this.Roles = new List<RoleModel>();
+            this.UserRoles = new List<UserRoleModel>();
         }
     }
 }

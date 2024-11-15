@@ -16,6 +16,11 @@ namespace LoginSystemApi.Mappings
                 .HasColumnType("VARCHAR(20)")
                 .IsRequired();
 
+            builder.HasMany(x => x.UserRoles)
+                .WithOne(x => x.Role)
+                .HasConstraintName("FK_UserRoles_RoleId")
+                .HasForeignKey("RoleId");
+
         }
     }
 }
