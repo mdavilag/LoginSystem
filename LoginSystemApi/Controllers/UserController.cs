@@ -2,6 +2,7 @@
 using LoginSystemApi.DTO;
 using LoginSystemApi.Models;
 using LoginSystemApi.Services;
+using LoginSystemApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
@@ -28,10 +29,10 @@ namespace LoginSystemApi.Controllers
                     .Include(x=>x.UserRoles)
                     .ThenInclude(x=>x.Role)
                     .ToListAsync();
-                return Ok(users);
+                return Ok(new ResultViewModel<List<UserModel>>(users));
             }
             catch(Exception ex){
-                return BadRequest(ex.Message);
+                return BadRequest(new ResultViewModel<UserModel>(ex.Message));
             }
         }
         [HttpGet("{id}")]
@@ -39,27 +40,27 @@ namespace LoginSystemApi.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (user != null) return Ok(user);
+            if (user != null) return Ok(new ResultViewModel<UserModel>(user));
 
-            else return NotFound();
+            else return NotFound(new ResultViewModel<UserModel>("Usuário não encontrado"));
 
         }
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto userDto)
         {
-            if(!ModelState.IsValid) return BadRequest(ModelState);
+            if(!ModelState.IsValid) return BadRequest(new ResultViewModel<UserModel>("ModelState não é válido"));
 
 
             try
             {
                 var created = await _service.RegisterUser(userDto);
 
-                if (created) return Ok("User registered");
-                else return BadRequest("Failed to register the user");
+                if (created) return Ok(new ResultViewModel<string>("Criado com sucesso"));
+                else return BadRequest(new ResultViewModel<UserModel>("Erro ao registrar usuário"));
                 
             }catch (Exception ex)
             {
-                return BadRequest($"Error {ex.Message}");
+                return BadRequest(new ResultViewModel<UserModel>(ex.Message));
             }
         }
     }

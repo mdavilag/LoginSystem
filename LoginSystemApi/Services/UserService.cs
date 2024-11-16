@@ -37,7 +37,7 @@ namespace LoginSystemApi.Services
                 };
 
                 // Validate and add User Cpf
-                if(CpfValidator.IsValid(CpfValidator.CleanCpf(userDto.Cpf)))
+                if (CpfValidator.IsValid(CpfValidator.CleanCpf(userDto.Cpf)))
                 {
                     user.Cpf = CpfValidator.CleanCpf(userDto.Cpf);
 
@@ -47,21 +47,20 @@ namespace LoginSystemApi.Services
                     return (false);
                 }
 
-                // Search for the Role "User" and adds into the new user roles
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
 
-                // To implement
-
+                // Search for role "user"
                 var userRole = await _context.Roles.FirstOrDefaultAsync(x => x.Name == "User");
                 if (userRole == null) return false;
 
-                _context.Users.Add(user);
-
-                user.UserRoles.Add(new UserRoleModel()
+                var userRoleModel = new UserRoleModel
                 {
-                    UserId = user.Id,
-                    RoleId = userRole.Id
-                });
+                    User = user,
+                    Role = userRole
+                };
 
+                _context.UserRoles.Add(userRoleModel);
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -74,10 +73,6 @@ namespace LoginSystemApi.Services
             
         } 
         
-        //public async Task<bool> UpdateUser()
-        //{
-
-        //}
         
     }
 }
