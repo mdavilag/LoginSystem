@@ -1,8 +1,10 @@
 ﻿using LoginSystemApi.Data;
 using LoginSystemApi.DTO;
 using LoginSystemApi.Models;
+using LoginSystemApi.Utils.Validators;
 using Microsoft.EntityFrameworkCore;
 using SecureIdentity.Password;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LoginSystemApi.Services
 {
@@ -14,6 +16,7 @@ namespace LoginSystemApi.Services
         {
             _context = context;
         }
+        
 
         public async Task<bool> RegisterUser(UserRegisterDto userDto) // Return here to improve error handling
         {
@@ -24,14 +27,25 @@ namespace LoginSystemApi.Services
                     Console.WriteLine("Email ou Cpf já cadastrado");
                     return (false);
                 }
+
                 // Create and map userDto to user
                 var user = new UserModel()
                 {
                     Name = userDto.Name,
                     Email = userDto.Email,
-                    Cpf = userDto.Cpf,
                     PasswordHash = PasswordHasher.Hash(userDto.Password)
                 };
+
+                // Validate and add User Cpf
+                if(CpfValidator.IsValid(CpfValidator.CleanCpf(userDto.Cpf)))
+                {
+                    user.Cpf = CpfValidator.CleanCpf(userDto.Cpf);
+
+                }
+                else
+                {
+                    return (false);
+                }
 
                 // Search for the Role "User" and adds into the new user roles
 
@@ -39,8 +53,6 @@ namespace LoginSystemApi.Services
 
                 var userRole = await _context.Roles.FirstOrDefaultAsync(x => x.Name == "User");
                 if (userRole == null) return false;
-
-
 
                 _context.Users.Add(user);
 
@@ -59,6 +71,7 @@ namespace LoginSystemApi.Services
                 return false; // Needs improvement
             }
 
+            
         } 
         
         //public async Task<bool> UpdateUser()
