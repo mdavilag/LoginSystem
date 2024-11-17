@@ -63,5 +63,7 @@ namespace LoginSystemApi.Controllers
                 return BadRequest(new ResultViewModel<UserModel>(ex.Message));
             }
         }
+
+
     }
 }
