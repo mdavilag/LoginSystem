@@ -10,7 +10,7 @@ using SQLitePCL;
 namespace LoginSystemApi.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/v1/[controller]/[action]")]
     public class UserController : ControllerBase
     {
         private readonly DataContext _context;
