@@ -5,6 +5,7 @@ using LoginSystemApi.Services;
 using LoginSystemApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SecureIdentity.Password;
 using SQLitePCL;
 
 namespace LoginSystemApi.Controllers
@@ -64,6 +65,40 @@ namespace LoginSystemApi.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDto userDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(new ResultViewModel<UserModel>("ModelState não é válido"));
+
+            try
+            {
+                var userToUpdate = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+                if(userToUpdate == null)
+                {
+                    return NotFound(new ResultViewModel<UserModel>("Usuário com o Id informado não encontrado"));
+                }
+
+                userToUpdate.Name = userDto.Name;
+                userToUpdate.Email = userDto.Email;
+
+                if (!string.IsNullOrEmpty(userDto.Password))
+                {
+                    userToUpdate.PasswordHash = PasswordHasher.Hash(userDto.Password);
+                }
+
+                userToUpdate.Cpf = userDto.Cpf;
+                userToUpdate.IsActive = userDto.IsActive;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new ResultViewModel<UserUpdateDto>(userDto));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

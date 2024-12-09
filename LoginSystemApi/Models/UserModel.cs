@@ -8,7 +8,7 @@
         public string PasswordHash { get; set; }
         public string? Cpf { get; set; }
 
-        public bool IsActive {  get; set;
+        public bool IsActive { get; set; }
         public ICollection<UserRoleModel> UserRoles{ get; set; }
 
         public UserModel() {
