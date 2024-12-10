@@ -2,6 +2,7 @@
 using LoginSystemApi.DTO;
 using LoginSystemApi.Models;
 using LoginSystemApi.Utils.Validators;
+using LoginSystemApi.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using SecureIdentity.Password;
 using System.Security.Cryptography.X509Certificates;
@@ -73,6 +74,69 @@ namespace LoginSystemApi.Services
             
         } 
         
-        
+        public async Task<ResultViewModel<UserModel>> UpdateUserAsync(int id, UserUpdateDto userDto)
+        {
+            var userToUpdate = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (userToUpdate == null) return new ResultViewModel<UserModel>("Id do usuário não encontrado");
+            try
+            {
+                if(!string.IsNullOrEmpty(userDto.Name))
+                {
+                    userToUpdate.Name = userDto.Name;
+                }
+                if (!string.IsNullOrEmpty(userDto.Email))
+                {
+                    if(userDto.Email != userToUpdate.Email)
+                    {
+                        // Verify if email already exists             
+                        if(_context.Users.Any(x=>x.Email == userDto.Email))
+                        {
+                            return new ResultViewModel<UserModel>("Esse e-mail já está cadastrado em outro usuário");
+                        }
+                        else
+                        {
+                            userToUpdate.Email = userDto.Email;
+                        }
+                    }
+                }
+                if (!string.IsNullOrEmpty(userDto.Password))
+                {
+                    userToUpdate.PasswordHash = PasswordHasher.Hash(userDto.Password);
+                }
+                if (!string.IsNullOrEmpty(userDto.Cpf))
+                {
+                    // Verify if cpf is valid and if already exists
+                    if(userDto.Cpf != userToUpdate.Cpf)
+                    {
+                        if(!CpfValidator.IsValid(userDto.Cpf))
+                        {
+                            return new ResultViewModel<UserModel>("CPF não é válido");
+                        }
+                        else if(_context.Users.Any(x=>x.Cpf == userDto.Cpf))
+                        {
+                            return new ResultViewModel<UserModel>("Esse CPF já está cadastrado em outro usuário");
+                        }
+                        else
+                        {
+                            userToUpdate.Cpf = userDto.Cpf;
+                        }
+                    }
+                }
+                if (userDto.IsActive != null)
+                {
+                    userToUpdate.IsActive = (bool)userDto.IsActive;
+                }
+                _context.SaveChangesAsync();
+
+                return new ResultViewModel<UserModel>(userToUpdate);
+            }catch(Exception ex)
+            {
+                return new ResultViewModel<UserModel>("Error: " + ex.Message);
+            }
+
+
+
+        }
     }
+    
 }
