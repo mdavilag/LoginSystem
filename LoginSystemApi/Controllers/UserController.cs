@@ -56,8 +56,8 @@ namespace LoginSystemApi.Controllers
             {
                 var created = await _service.RegisterUser(userDto);
 
-                if (created) return Ok(new ResultViewModel<string>("Criado com sucesso"));
-                else return BadRequest(new ResultViewModel<UserModel>("Erro ao registrar usuário"));
+                if (!created.Errors.Any()) return Ok(new ResultViewModel<string>("Criado com sucesso"));
+                else return BadRequest(new ResultViewModel<UserModel>(created.Errors));
                 
             }catch (Exception ex)
             {

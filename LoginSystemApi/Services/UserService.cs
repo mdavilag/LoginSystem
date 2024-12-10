@@ -19,14 +19,13 @@ namespace LoginSystemApi.Services
         }
         
 
-        public async Task<bool> RegisterUser(UserRegisterDto userDto) // Return here to improve error handling
+        public async Task<ResultViewModel<UserModel>> RegisterUser(UserRegisterDto userDto) // Return here to improve error handling
         {
             try
             {   // Check if user already exists
                 if (await _context.Users.AnyAsync(x => x.Email == userDto.Email || x.Cpf == userDto.Cpf))
                 {
-                    Console.WriteLine("Email ou Cpf já cadastrado");
-                    return (false);
+                    return new ResultViewModel<UserModel>("Email ou Cpf já cadastrado");
                 }
 
                 // Create and map userDto to user
@@ -45,7 +44,7 @@ namespace LoginSystemApi.Services
                 }
                 else
                 {
-                    return (false);
+                    return new ResultViewModel<UserModel>("Cpf não é válido");
                 }
 
                 _context.Users.Add(user);
@@ -53,7 +52,7 @@ namespace LoginSystemApi.Services
 
                 // Search for role "user"
                 var userRole = await _context.Roles.FirstOrDefaultAsync(x => x.Name == "User");
-                if (userRole == null) return false;
+                if (userRole == null) return new ResultViewModel<UserModel>("Erro ao localizar Role: User no banco de dados");
 
                 var userRoleModel = new UserRoleModel
                 {
@@ -64,11 +63,11 @@ namespace LoginSystemApi.Services
                 _context.UserRoles.Add(userRoleModel);
                 await _context.SaveChangesAsync();
 
-                return true;
+                return new ResultViewModel<UserModel>(user);
             }catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                return false; // Needs improvement
+                return new ResultViewModel<UserModel>(ex.Message);
             }
 
             
@@ -137,6 +136,10 @@ namespace LoginSystemApi.Services
 
 
         }
+    
+        
+        
+    
     }
     
 }
